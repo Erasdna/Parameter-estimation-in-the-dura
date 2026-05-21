@@ -1,0 +1,27 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      setFieldsDict;
+}
+
+defaultFieldValues
+(
+    volScalarFieldValue Chi2 0
+    volScalarFieldValue K2   1.e-25
+);
+
+regions
+(
+    zoneToCell
+    {
+        name myBoxZone;
+
+        fieldValues
+        (
+            volScalarFieldValue Chi2 1
+            volScalarFieldValue K2   2.39e-7
+        );
+    }
+);

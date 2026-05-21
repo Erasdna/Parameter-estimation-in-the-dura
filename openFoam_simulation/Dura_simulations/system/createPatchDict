@@ -1,0 +1,57 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| createPatchDict |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+
+pointSync false;
+
+patches
+(
+
+    //Internal and External Wall
+    {
+        name        internalPatch;
+        patchInfo
+        {
+            type        wall;
+        }
+        constructFrom set;
+        set           internalFacesSet;
+    }
+    // ------------------------------------------------------------
+    // AG patch on INTERNAL boundary
+    // ------------------------------------------------------------
+    {
+        name        AG;
+        patchInfo
+        {
+            type    patch;
+        }
+
+        constructFrom   set;
+        set             AG_set;
+    }
+
+    // ------------------------------------------------------------
+    // Cervical patch on EXTERNAL boundary
+    // ------------------------------------------------------------
+    {
+        name        cervical_external;
+        patchInfo
+        {
+            type    patch;
+        }
+
+        constructFrom   set;
+        set             cervical_external_set;
+    }
+);
+
+// ************************************************************************* //

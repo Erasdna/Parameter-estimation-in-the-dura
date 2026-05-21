@@ -1,0 +1,20 @@
+data_folder: "data/Gonzo/mri_processed_data/sub-01/"
+output_folder: "data/paper/"
+
+# Simulation parameters
+phi :
+  - 2.0
+  - 80.0
+P_bot:
+  - 1.0e-3
+  - 100.0
+D_L:
+  - 1e-5
+  - 5e-3
+P_DcLV:
+  - 1e-3
+  - 400.0
+phi_L:
+  - 0.005
+  - 0.07
+qmc_samples: 1000

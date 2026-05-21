@@ -1,0 +1,238 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| topoSetDict |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      topoSetDict;
+}
+
+actions
+(
+
+
+// =========================================================
+// cellSet inside dura
+// =========================================================
+{
+    name    volCells;
+    type    cellSet;
+    action  new;
+    source  surfaceToCell;
+    file    "constant/triSurface/internalBoundary.stl";
+    outsidePoints   ((0 -7 0));
+    includeInside   true;
+    includeOutside  false;
+    includeCut      true;
+    useSurfaceOrientation false;
+    nearDistance    1.0;   // aumenta ancora se la mesh è grossolana
+    curvature       0.9;
+}
+
+// =========================================================
+// (cells → points → cells)
+// =========================================================
+
+// --- Layer 1 ---
+{ name tmpPts; type pointSet; action new; source cellToPoint; option all; set volCells; }
+{ name volCells; type cellSet; action add; source pointToCell; option any; set tmpPts; }
+
+// --- Layer 2 ---
+{ name tmpPts; type pointSet; action new; source cellToPoint; option all; set volCells; }
+{ name volCells; type cellSet; action add; source pointToCell; option any; set tmpPts; }
+
+// --- Layer 3 ---
+{ name tmpPts; type pointSet; action new; source cellToPoint; option all; set volCells; }
+{ name volCells; type cellSet; action add; source pointToCell; option any; set tmpPts; }
+
+// --- Layer 4 ---
+{ name tmpPts; type pointSet; action new; source cellToPoint; option all; set volCells; }
+{ name volCells; type cellSet; action add; source pointToCell; option any; set tmpPts; }
+
+// --- Layer 5 ---
+{ name tmpPts; type pointSet; action new; source cellToPoint; option all; set volCells; }
+{ name volCells; type cellSet; action add; source pointToCell; option any; set tmpPts; }
+
+// =========================================================
+// Faces of expanded volume → intersection with patch0
+// =========================================================
+{
+    name    volFaces;
+    type    faceSet;
+    action  new;
+    source  cellToFace;
+    option  all;
+    set     volCells;
+}
+{
+    name    internalFacesSet;
+    type    faceSet;
+    action  new;
+    source  patchToFace;
+    patch   internalPatch;
+}
+{
+    name    internalFacesSet;
+    type    faceSet;
+    action  subset;
+    source  faceToFace;
+    set     volFaces;
+}
+
+
+
+
+    // ============================================================
+    // Create AG_set (Strictly on the INTERNAL side)
+    // ============================================================
+    {
+        name    AG_set;
+        type    faceSet;
+        action  new;
+        source  faceToFace;
+        set     internalFacesSet;
+    }
+
+    {
+        name    AG_set;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        box     (-20 60 -50) (20 120 90);
+    }
+
+    // Prevent overlap so createPatch doesn't duplicate faces
+    {
+        name    internalFacesSet;
+        type    faceSet;
+        action  delete;
+        source  faceToFace;
+        set     AG_set;
+    }
+
+    // ============================================================
+    // Create Cervical set
+    // ============================================================
+    {
+        name    cervical_external_set;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        patch   patch0;
+    }
+
+    {
+        name    cervical_external_set;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        box     (-16 -100 10) (16 -56 45); // Your exact physiological box
+    }
+
+    // Ensure cervical doesn't accidentally steal from the internal set
+    {
+        name    cervical_external_set;
+        type    faceSet;
+        action  delete;
+        source  faceToFace;
+        set     internalFacesSet;
+    }
+
+    // ============================================================
+    // mLV region
+    // ============================================================
+
+    //Select the cells in the geometric box -> cellSet
+    {
+        name    myBoxCells;
+        type    cellSet;
+        action  new;
+
+        source  boxToCell;
+        sourceInfo
+        {
+            min (-80 -120 0); //-50
+            max (80 -80 87);
+        }
+    }
+
+
+
+// Define the base set (the whole brain)
+    {
+        name    brain_set;
+        type    cellSet;
+        action  new;
+        source  sphereToCell;
+        sourceInfo
+        {
+            centre (0 0 0);
+            radius 200;
+        }
+    }
+
+    // Subtract the frontal part
+    {
+        name    brain_set;
+        type    cellSet;
+        action  subtract;
+        source  sphereToCell;
+        sourceInfo
+        {
+            centre (0 30 -90);
+            radius 50;
+        }
+    }
+
+    {
+        name    brain_set;
+        type    cellSet;
+        action  subtract;
+        source  sphereToCell;
+        sourceInfo
+        {
+            centre (-75 72 -55);
+            radius 55;
+        }
+    }
+
+    {
+        name    brain_set;
+        type    cellSet;
+        action  subtract;
+        source  sphereToCell;
+        sourceInfo
+        {
+            centre (75 72 -55);
+            radius 55;
+        }
+    }
+
+    {
+        name    brain_set;
+        type    cellSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-20 60 -50) (20 120 90);
+        }
+    }
+
+{
+    name    myBoxZone;
+    type    cellZoneSet;
+    action  new;
+
+    source  setToCellZone;
+    sourceInfo
+    {
+        set brain_set;
+    }
+}
+
+);

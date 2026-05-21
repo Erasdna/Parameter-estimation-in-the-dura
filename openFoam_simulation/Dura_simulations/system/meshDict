@@ -1,0 +1,68 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2506                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      meshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaceFile "constant/triSurface/ribbon.stl";
+
+
+maxCellSize 5.0;
+
+featureAngle 30;
+
+surfaceMeshRefinement
+{
+    ribbon
+    {
+        surfaceFile "constant/triSurface/ribbon.stl";
+
+
+        cellSize 0.35;
+
+        refinementThickness 0;
+    }
+}
+
+edgeMeshRefinement
+{
+    ribbonEdges
+    {
+        edgeFile "constant/triSurface/ribbon.eMesh";
+
+        cellSize 0.35;
+    }
+}
+
+meshQualityControls
+{
+    maxNonOrthogonality 65;
+    maxNumIterations 20;
+    maxSkewness 4;
+    minFlatness 0.5;
+    minVol 1e-13;
+    minTetQuality 1e-15;
+    minArea 1e-13;
+}
+
+optimisationParameters
+{
+    maxNumIterations 40;
+    maxNonOrthogonality 65;
+
+    maxSkewness 4;
+}
+
+numberOfThreads 18;
+
+// ************************************************************************* //

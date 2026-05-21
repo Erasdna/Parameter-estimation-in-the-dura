@@ -1,0 +1,20 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM: The Open Source CFD Toolbox                                     |
+| Version:  v2506                                                           |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Newtonian fluid model
+transportModel  Newtonian;
+
+nu              nu [0 2 -1 0 0 0 0] 0.7; // Kinematic Viscosity (fitted in the solver) (mm2/s).
+
+
+// ************************************************************************* //

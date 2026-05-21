@@ -1,0 +1,39 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM: The Open Source CFD Toolbox                                       |
+| Version:  v2406                                                             |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      doubleDarcyProperties;
+}
+
+mu      [1 -1 -1 0 0 0 0]  0.00252;     // kg/(mm.h)
+
+Lp      [-1 2 1 0 0 0 0]   9.11111e-09; // mm.h/kg
+
+sigma   [0 0 0 0 0 0 0]    0;           // Stavermann Reflection Coefficient
+
+beta    [0 0 -1 0 0 0 0]   0;     // 1/h
+
+gamma   [0 0 -1 0 0 0 0]   0;     // 1/h
+
+D1      [0 2 -1 0 0 0 0]   0.35;        // D_D, Dura Diffusion, mm^2/h
+
+D2      [0 2 -1 0 0 0 0]   4.5;        // D_L, Lymphatic Diffusion, mm^2/h
+
+R       [1 2 -2 -1 -1 0 0] 1.07749e+11; // kg mm^2/(h^2 mmol K)
+
+Temperature [0 0 0 1 0 0 0] 310;        // K
+
+P_DL    [0 0 -1 0 0 0 0]   1.5;          // Exchange between Dura and Lymphatics, 1/h
+
+S_mLV   [0 2 0 0 0 0 0]    2.6e5;       // mm^2
+
+V_dura  [0 3 0 0 0 0 0]    9.19e4;      // mm^3
+
+phi_D   [0 0 0 0 0 0 0]    0.15;         // porosity D
+
+phi_L   [0 0 0 0 0 0 0]    0.027;        // porosity L

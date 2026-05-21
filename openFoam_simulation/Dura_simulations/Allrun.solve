@@ -1,0 +1,10 @@
+#!/bin/sh
+cd "${0%/*}" || exit
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+echo "=== Start Parallel Simulaion ==="
+runApplication decomposePar -force
+echo "Running solver..."
+runParallel $(getApplication)
+runApplication reconstructPar
+echo "=== Simulation and Reconstruction Complete ==="

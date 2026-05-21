@@ -1,0 +1,172 @@
+
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM: The Open Source CFD Toolbox                                     |
+| Version:  v2406                                                           |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     doubleDarcyStarlingFoam;
+
+startFrom       startTime;
+startTime       0;
+
+stopAt          endTime;
+endTime         72;
+
+deltaT          0.1;
+writeControl    adjustableRunTime;
+writeInterval   4;
+
+purgeWrite      0;
+writeFormat     ascii;
+writePrecision  8;
+writeCompression off;
+
+timeFormat      general;
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  no;
+maxCo           100;
+maxAlphaCo      0.2;
+maxDeltaT       1;
+
+
+functions
+{
+
+
+    // Forcing Cin_field loading at time 0
+    readCin
+    {
+        type            readFields;
+        libs            ("libfieldFunctionObjects.so");
+        fields          (Cin_field);
+    }
+
+    // Update Cin_field every time step
+    forceUpdateCin
+    {
+        type            coded;
+        libs            ("libutilityFunctionObjects.so");
+        name            forceUpdateCin;
+        executeControl  timeStep;
+        executeInterval 1;
+
+        codeExecute
+        #{
+            if (mesh().foundObject<volScalarField>("Cin_field"))
+            {
+                volScalarField& Cin = const_cast<volScalarField&>(mesh().lookupObject<volScalarField>("Cin_field"));
+                Cin.correctBoundaryConditions();
+                Info<< " -> Forzato aggiornamento spaziale di Cin_field al tempo: " << mesh().time().value() << endl;
+            }
+        #};
+    }
+
+    averageFields
+    {
+        type            volFieldValue;
+        libs            (fieldFunctionObjects);
+        log             true;
+        writeControl    adjustableRunTime;
+        writeInterval   4;
+
+        regionType      all;
+        operation       volAverage;
+        fields          (C1 C2);
+
+        writeFields     false;
+        writeToFile     true;
+
+        append          true;
+    }
+
+
+
+
+    // ==========================================
+    // Calculate the gradient of p2
+    // ==========================================
+    gradP2
+    {
+        type            grad;
+        libs            (fieldFunctionObjects);
+        field           p2;
+        result          gradientP2;
+        writeControl    adjustableRunTime; //runTime;
+        writeInterval   4;
+    }
+
+    // ==========================================
+    // DARCY VELOCITY (u = -(K2/mu) * grad p2)
+    // ==========================================
+    calcDarcyU
+    {
+        type            exprField;
+        libs            (fieldFunctionObjects);
+        field           U_darcy;
+        expression      "-K2 * gradientP2/0.00252";
+        writeControl    adjustableRunTime;
+        writeInterval   4;
+    }
+
+    // ==========================================
+    // ADVECTION VECTOR (u * C1)
+    // ==========================================
+    calcAdvFluxC1
+    {
+        type            exprField;
+        libs            (fieldFunctionObjects);
+        field           advFluxC1;
+        expression      "U_darcy * C2/0.027";
+        writeControl    adjustableRunTime;
+        writeInterval   4;
+    }
+
+    // ==========================================
+    // DIFFUSION GRADIENT (grad C1)
+    // ==========================================
+    gradC1
+    {
+        type            grad;
+        libs            (fieldFunctionObjects);
+        field           C2;
+        result          gradientC1;
+        writeControl    adjustableRunTime;
+        writeInterval   4;
+    }
+
+    // ==========================================
+    // INTEGRATE BOTH OVER PATCH
+    // ==========================================
+    effluxRateC1
+    {
+        type            surfaceFieldValue;
+        libs            (fieldFunctionObjects);
+        writeControl    runTime;
+        writeInterval   4;
+        log             true;
+        regionType      patch;
+        name            cervical_external;
+        operation       areaNormalIntegrate;
+        fields          (advFluxC1 gradientC1);
+        writeFields     false;
+        writeToFile     true;
+        append          true;
+    }
+
+
+
+}
+
+
+// ************************************************************************* //

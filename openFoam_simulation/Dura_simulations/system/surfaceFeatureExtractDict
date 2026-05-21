@@ -1,0 +1,28 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM: The Open Source CFD Toolbox                                     |
+| Version:  v2506                                                           |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      surfaceFeatureExtractDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ribbon.stl
+{
+    extractionMethod    extractFromSurface;
+    includedAngle       150;
+    writeObj            yes;
+    writeFeatures       yes;
+    pointCloseness      yes;
+    minPoints           20;
+    extractFrom         all;
+}
+
+
+
+
+// ************************************************************************* //

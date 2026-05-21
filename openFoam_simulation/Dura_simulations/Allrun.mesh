@@ -1,0 +1,11 @@
+#!/bin/sh
+cd "${0%/*}" || exit
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+echo "=== Start Pre-processing: Meshing and Fields ==="
+runApplication surfaceFeatureExtract
+runApplication pMesh
+runApplication topoSet
+runApplication setFields
+runApplication createPatch -overwrite
+echo "=== Pre-processing complete ==="
