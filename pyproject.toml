@@ -19,8 +19,8 @@ dependencies = [
     "seaborn>=0.13.2",
     "porespy>=3.0.2",
     "tqdm>=4.67.3",
-    "mritk",
     "scikit-learn>=1.7.2",
+    "mritk",
 ]
 
 [project.optional-dependencies]
@@ -114,4 +114,4 @@ version: {new_version}
 """
 
 [tool.uv.sources]
-mritk = { git = "https://github.com/scientificcomputing/mri-toolkit.git", branch = "segmentation-lut" }
+mritk = { git = "https://github.com/scientificcomputing/mri-toolkit.git" }

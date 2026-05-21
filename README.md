@@ -1,6 +1,6 @@
 <!-- cspell:ignore millimoles mmol numpy nibabel scipy scikit matplotlib Allwmake topo Allrun Allclean intrathecal gadobutrol -->
 
-# Multiphasic Transport in the Human Brain Dura: How Meningeal Lymphatic Vessels Drive Waste Clearance from Brain Cerebrospinal Fluid
+# Multiphasic Transport in the Human Cranial Dura: How Meningeal Lymphatic Vessels Drive Waste Clearance from Cerebrospinal Fluid
 
 This repository contains supplementary code for the paper
 > Girelli et al. 2026.
@@ -137,7 +137,7 @@ Please pay close attention when interpreting the simulation results, editing dic
 
 If you wish to skip the meshing process and the boundary condition mapping, the fully meshed case,along with the pre-mapped boundary conditions and the solutions, are freely available on Zenodo.
 
-**Download the complete dataset here:** https://zenodo.org/uploads/20120581
+**Download the complete dataset here:** https://doi.org/10.5281/zenodo.20120581
 
 Or run the following bash command to automatically download and move all the mesh and BC in the right folder for the case "Data-integrated 72 hour simulation of intrathecal gadobutrol"
 
@@ -206,7 +206,7 @@ To reset the case to its initial state and remove all generated mesh, processor 
   author = {Girelli, Alberto and Solheim, Andreas and Lysan, Sofie and Storås, Tryggve and Nordengen, Kaja and Mardal, Kent-Andre},
   doi = {10.5281/zenodo.1234},
   month = {5},
-  title = {{My Research Software}},
+  title = {{Multiphasic Transport in the Human Cranial Dura: How Meningeal Lymphatic Vessels Drive Waste Clearance from Cerebrospinal Fluid}},
   url = {https://github.com/scientificcomputing/example-paper},
   version = {1.0},
   year = {2026}

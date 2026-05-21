@@ -983,7 +983,7 @@ requires-dist = [
     { name = "jupyter-book", marker = "extra == 'docs'" },
     { name = "jupytext", marker = "extra == 'docs'" },
     { name = "matplotlib" },
-    { name = "mritk", git = "https://github.com/scientificcomputing/mri-toolkit.git?branch=segmentation-lut" },
+    { name = "mritk", git = "https://github.com/scientificcomputing/mri-toolkit.git" },
     { name = "nibabel" },
     { name = "numpy" },
     { name = "pandas", extras = ["output-formatting"] },
@@ -2254,8 +2254,8 @@ wheels = [
 
 [[package]]
 name = "mritk"
-version = "0.4.0"
-source = { git = "https://github.com/scientificcomputing/mri-toolkit.git?branch=segmentation-lut#9b0d033965ef7ff23a33b402560717d2069e58b6" }
+version = "0.4.1"
+source = { git = "https://github.com/scientificcomputing/mri-toolkit.git#f578c9c89a4c756f0c6d8b3696dcb7826fdbdd14" }
 dependencies = [
     { name = "dcm2niix" },
     { name = "nibabel" },
