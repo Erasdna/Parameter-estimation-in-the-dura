@@ -18,7 +18,7 @@ WORKDIR /repo
 COPY . .
 
 # Make environment
-RUN uv sync
+RUN uv sync --verbose
 
 ENV CORES="10"
 ENV N_QMC="1000"
