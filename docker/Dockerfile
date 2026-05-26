@@ -17,6 +17,8 @@ WORKDIR /repo
 
 COPY . .
 
+ENV UV_COMPILE_BYTECODE=0
+
 # Make environment
 RUN uv sync --verbose
 
