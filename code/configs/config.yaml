@@ -4,7 +4,7 @@ output_folder: "data/paper/"
 # Simulation parameters
 phi :
   - 2.0
-  - 80.0
+  - 140.0
 P_bot:
   - 1.0e-3
   - 100.0

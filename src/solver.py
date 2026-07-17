@@ -5,7 +5,7 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 
 
-def ode_system(t, y, params, M_adv, q_S_pos, CSF_at_t, M_laplacian, DcLV_mask):
+def ode_system(t, y, params, M_adv, q_S_pos, CSF_at_t, M_laplacian, DcLV_mask, Vol_vec):
     phi, P_bot, D_L, P_DcLV, phi_L = params
     CD, CL = y[: M_laplacian.shape[0]], y[M_laplacian.shape[0] :]
 
@@ -19,14 +19,14 @@ def ode_system(t, y, params, M_adv, q_S_pos, CSF_at_t, M_laplacian, DcLV_mask):
         D_D * M_laplacian.dot(CD)
         + constants.INV_L_DURA * P_vec * (eta * CSF_at_t - CD)
         + exchange
-        - q_S_pos * CD
+        - (1 / (phi * phi_L)) * q_S_pos * CD
     )
     clearance_vec = P_DcLV * DcLV_mask
     dCLdt = (
         D_L * M_laplacian.dot(CL)
-        + (1.0 / phi_L) * M_adv.dot(CL)
+        + (1.0 / (phi_L * Vol_vec)) * M_adv.dot(CL)
         - exchange
-        + q_S_pos * CD
+        + (1 / (phi * phi_L)) * q_S_pos * CD
         - clearance_vec * CL
     )
     return np.concatenate([dCDdt, dCLdt])
@@ -61,6 +61,7 @@ def simulate(
     fitted_csf_functions,
     Z_coords: np.ndarray,
     args,
+    Vol_vec,
 ):
     # Connectivity matrices
     M_laplacian, M_G_dense = matrices
@@ -73,7 +74,7 @@ def simulate(
 
     # Load parameters
     phi, _, _, _, phi_L = params
-    if not (0.1 <= phi * phi_L <= 0.35):
+    if not (0.1 <= phi * phi_L <= 0.7):
         return None
 
     N_NODES = M_laplacian.shape[0]
@@ -110,6 +111,7 @@ def simulate(
                 np.array([f(t) for f in fitted_csf_functions]),
                 M_laplacian,
                 DcLV_mask,
+                Vol_vec,
             ),
             (0, 72),
             np.zeros(N_NODES * 2),

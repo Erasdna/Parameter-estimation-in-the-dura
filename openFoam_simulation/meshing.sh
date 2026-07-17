@@ -14,10 +14,10 @@ echo "=========================================================="
 # READ USER INPUT AND SELECT CASE
 # ---------------------------------------------------------
 if [ "$1" == "Albumin" ]; then
-    ZENODO_RECORD_ID="20120581"
+    ZENODO_RECORD_ID="21393950"
     ARCHIVE_NAME="Albumin_3D_Case.tar.gz"
 elif [ "$1" == "Mapping" ]; then
-    ZENODO_RECORD_ID="20120581"
+    ZENODO_RECORD_ID="21393950"
     ARCHIVE_NAME="Dura_Mapping3D_Case.tar.gz"
 else
     echo "ERROR: You must specify which dataset to download!"

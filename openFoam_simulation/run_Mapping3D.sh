@@ -12,7 +12,7 @@ echo "=========================================================="
 # 1. CONFIGURATION
 # ---------------------------------------------------------
 #
-ZENODO_RECORD_ID="20120581"
+ZENODO_RECORD_ID="21393950"
 
 ARCHIVE_NAME="Dura_Mapping3D_Case.tar.gz"
 
